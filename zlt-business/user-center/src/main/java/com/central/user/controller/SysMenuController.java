@@ -9,6 +9,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.central.common.annotation.LoginUser;
 import com.central.common.constant.CommonConstant;
 import com.central.common.model.*;
+import com.central.common.utils.Jackson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,23 +38,7 @@ public class SysMenuController {
      * @param sysMenus
      * @return
      */
-    public static List<SysMenu> treeBuilder(List<SysMenu> sysMenus) {
-        List<SysMenu> menus = new ArrayList<>();
-        for (SysMenu sysMenu : sysMenus) {
-            if (ObjectUtil.equal(-1L, sysMenu.getParentId())) {
-                menus.add(sysMenu);
-            }
-            for (SysMenu menu : sysMenus) {
-                if (menu.getParentId().equals(sysMenu.getId())) {
-                    if (sysMenu.getSubMenus() == null) {
-                        sysMenu.setSubMenus(new ArrayList<>());
-                    }
-                    sysMenu.getSubMenus().add(menu);
-                }
-            }
-        }
-        return menus;
-    }
+
 
     /**
      * 删除菜单
@@ -168,6 +153,28 @@ public class SysMenuController {
             return Collections.emptyList();
         }
         List<SysMenu> menus = menuService.findByRoleCodes(roles.stream().map(SysRole::getCode).collect(Collectors.toSet()), CommonConstant.MENU);
+        log.info(Jackson.toString(menus));
         return treeBuilder(menus);
+    }
+    public static List<SysMenu> treeBuilder(List<SysMenu> sysMenus) {
+        List<SysMenu> menus = new ArrayList<>();
+        for (SysMenu sysMenu : sysMenus) {
+
+            if (ObjectUtil.equal(-1L, sysMenu.getParentId())) {
+                menus.add(sysMenu);
+            }
+
+            for (SysMenu menu : sysMenus) {
+                if (menu.getParentId().equals(sysMenu.getId())) {
+                    if (sysMenu.getSubMenus() == null) {
+                        sysMenu.setSubMenus(new ArrayList<>());
+                    }
+                    sysMenu.getSubMenus().add(menu);
+                }
+            }
+
+
+        }
+        return menus;
     }
 }

@@ -12,6 +12,7 @@ import com.central.common.constant.CommonConstant;
 import com.central.common.model.*;
 import com.central.common.utils.ExcelUtil;
 //import com.central.log.annotation.AuditLog;
+import com.central.common.utils.Jackson;
 import com.central.log.annotation.AuditLog;
 import com.central.search.client.service.IQueryService;
 import com.central.search.model.LogicDelDto;
@@ -65,6 +66,7 @@ public class SysUserController {
     @ApiOperation(value = "根据access_token当前登录用户")
     @GetMapping("/users/current")
     public Result<LoginAppUser> getLoginAppUser(@LoginUser(isFull = true) SysUser user) {
+        log.info(Jackson.toString(appUserService.getLoginAppUser(user)));
         return Result.succeed(appUserService.getLoginAppUser(user));
     }
 

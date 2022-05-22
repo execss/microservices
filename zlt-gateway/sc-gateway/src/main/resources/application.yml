@@ -7,44 +7,44 @@ spring:
           enabled: true
       routes:
         - id: auth
-          uri: lb://uaa-server
+          uri: http://127.0.0.1:8000/**
           predicates:
             - Path=/api-uaa/**
           filters:
             - StripPrefix=1
             - PreserveHostHeader
         - id: auth-login-page
-          uri: lb://uaa-server
+          uri: http://127.0.0.1:8000/**
           predicates:
             - Path=/login.html
           filters:
             - PreserveHostHeader
         - id: auth-login-process
-          uri: lb://uaa-server
+          uri: http://127.0.0.1:8000/**
           predicates:
             - Path=/user/login
           filters:
             - PreserveHostHeader
         - id: auth-login-token
-          uri: lb://uaa-server
+          uri: http://127.0.0.1:8000/**
           predicates:
             - Path=/oauth/token
           filters:
             - PreserveHostHeader
         - id: auth-login-authorize
-          uri: lb://uaa-server
+          uri: http://127.0.0.1:8000/**
           predicates:
             - Path=/oauth/authorize
           filters:
             - PreserveHostHeader
         - id: auth-check-process
-          uri: lb://uaa-server
+          uri: http://127.0.0.1:8000/**
           predicates:
             - Path=/oauth/check_token
           filters:
             - PreserveHostHeader
         - id: user
-          uri: lb://user-center
+          uri: http://127.0.0.1:7000/**
           predicates:
             - Path=/api-user/**
           filters:

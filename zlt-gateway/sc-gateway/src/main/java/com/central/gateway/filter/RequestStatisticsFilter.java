@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import eu.bitwalker.useragentutils.UserAgent;
 import com.central.gateway.utils.ReactiveAddrUtil;
 import com.central.log.monitor.PointUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -24,6 +25,7 @@ import java.util.Map;
  * Github: https://github.com/zlt2000
  */
 @Component
+@Slf4j
 public class RequestStatisticsFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -31,6 +33,7 @@ public class RequestStatisticsFilter implements GlobalFilter, Ordered {
         Map<String, String> headers = request.getHeaders().toSingleValueMap();
         UserAgent userAgent = UserAgent.parseUserAgentString(headers.get("User-Agent"));
         //埋点
+        log.info(request.getURI().toString());
         PointUtil.debug("1", "request-statistics",
                 "ip=" + ReactiveAddrUtil.getRemoteAddr(request)
                         + "&browser=" + getBrowser(userAgent.getBrowser().name())
